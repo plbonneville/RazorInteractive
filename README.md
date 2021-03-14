@@ -10,7 +10,7 @@ To get started with Razor in .NET Interactive Notebooks, first install the `Razo
 
 Using the `#!razor` magic command your code cell will be parsed by a Razor engine and the results displayed using the `"txt/html"` mime type.
 
-```
+```razor
 #!razor
 
 @{
@@ -33,7 +33,7 @@ var lastname = "Doe";
 var colors = new [] { "red", "green", "blue" };
 ```
 
-```
+```razor
 #!razor
 
 <p>Hello <b>@Model.firstname @Model.lastname</b>, what is you favorite a color?</p>
