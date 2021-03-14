@@ -1,0 +1,46 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+    <IncludeBuildOutput>true</IncludeBuildOutput>
+    <IsPackable>true</IsPackable>
+    <PackageDescription>Renders Razor markup in dotnet-interactive notebooks.</PackageDescription>
+    <Version>0.0.1</Version>
+
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <Deterministic>true</Deterministic>
+    <IncludeSymbols>true</IncludeSymbols>
+
+    <!-- <PackageProjectUrl>https://github.com/plbonneville/RazorInteractiveNotebookExtension</PackageProjectUrl> -->
+    <PackageProjectUrl>https://github.com/plbonneville/RazorInteractive</PackageProjectUrl>
+    <Authors>Pier-Luc Bonneville</Authors>
+  </PropertyGroup>
+
+   <PropertyGroup>
+    <!-- This group contains project properties for RazorLight on .NET Core -->
+    <PreserveCompilationReferences>true</PreserveCompilationReferences>
+    <PreserveCompilationContext>true</PreserveCompilationContext>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="bin\**" />
+    <EmbeddedResource Remove="bin\**" />
+    <None Remove="bin\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="$(OutputPath)/RazorInteractive.dll" Pack="true" PackagePath="interactive-extensions/dotnet" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.DotNet.Interactive" Version="1.0.0-beta.21155.3" />
+    <PackageReference Include="Microsoft.DotNet.Interactive.CSharp" Version="1.0.0-beta.21155.3" />
+    <PackageReference Include="RazorLight" Version="2.0.0-rc.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Needed when running on the docker jupyter/base-notebook image -->
+    <PackageReference Include="System.Runtime.InteropServices.WindowsRuntime" Version="4.3.0" />
+  </ItemGroup>
+
+</Project>
