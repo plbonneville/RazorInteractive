@@ -2,8 +2,6 @@
 
 [![NuGet version (RazorInteractive)](https://img.shields.io/nuget/v/RazorInteractive.svg)](https://www.nuget.org/packages/RazorInteractive/)
 
-![GitHub branch checks state](https://img.shields.io/github/checks-status/plbonneville/RazorInteractive/ci)
-
 To get started with Razor in .NET Interactive Notebooks, first install the `RazorInteractive` NuGet package. In a new `C# (.NET Interactive)` cell enter and run the following:
 
 ```
