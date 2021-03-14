@@ -1,12 +1,14 @@
 # .NET Interactive Nootbooks Razor Extension
 
+(https://www.nuget.org/packages/RazorInteractive) [![NuGet version (RazorInteractive)](https://img.shields.io/nuget/v/RazorInteractive.svg?style=flat-square)](https://www.nuget.org/packages/RazorInteractive/)
+
 To get started with Razor in .NET Interactive Notebooks, first install the `RazorInteractive` NuGet package. In a new `C# (.NET Interactive)` cell enter and run the following:
 
 ```
 #r "nuget: RazorInteractive, 1.0.0"
 ```
 
-Using the #!razor magic command your code cell will be parsed by a Razor engine and the results displayed using the "txt/html" mime type.
+Using the `#!razor` magic command your code cell will be parsed by a Razor engine and the results displayed using the `"txt/html"` mime type.
 
 ```
 #!razor
