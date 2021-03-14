@@ -1,6 +1,5 @@
 # .NET Interactive Nootbooks Razor Extension
 
-![CI](https://github.com/plbonneville/RazorInteractive/ci/badge.svg)
 [![NuGet version (RazorInteractive)](https://img.shields.io/nuget/v/RazorInteractive.svg)](https://www.nuget.org/packages/RazorInteractive/)
 
 To get started with Razor in .NET Interactive Notebooks, first install the `RazorInteractive` NuGet package. In a new `C# (.NET Interactive)` cell enter and run the following:
