@@ -32,11 +32,7 @@ namespace RazorInteractive
 
                     var code = DeaultImports
                         .Aggregate(new StringBuilder(),
-                        (sb, @namespace) =>
-                        {
-                            sb.AppendLine($"@using {@namespace}");
-                            return sb;
-                        });
+                        (sb, @namespace) => sb.AppendLine($"@using {@namespace}"));
 
                     code.Append(sc.Code);
 
