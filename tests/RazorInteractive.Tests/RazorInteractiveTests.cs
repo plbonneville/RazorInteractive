@@ -237,7 +237,66 @@ namespace RazorInteractive.Tests
             KernelEvents
             .Should()
             .ContainSingle<StandardErrorValueProduced>(); // StandardErrorValueProduced
+        }
 
+        [Fact]
+        public async Task It_has_the_default_namespaces()
+        {
+            // Arrange
+            using var events = _kernel.KernelEvents.ToSubscribedList();
+
+            // Act
+            await _kernel.SubmitCodeAsync(@"#!razor
+            @{
+                var date = new DateTime(2021, 1, 3);
+            }
+
+            <p>@date.ToString(""yyyy-MM-dd"")</p>
+            ");
+
+            // Assert
+            KernelEvents
+                .Should()
+                .ContainSingle<DisplayEvent>()
+                .Which
+                .FormattedValues
+                .Should()
+                .ContainSingle(v => v.MimeType == "text/html")
+                .Which
+                .Value
+                .Should()
+                .Contain($"2021-01-03");
+        }
+
+        [Fact]
+        public async Task It_doesnt_throw_error_when_duplicate_using_namespaces()
+        {
+            // Arrange
+            using var events = _kernel.KernelEvents.ToSubscribedList();
+
+            // Act
+            await _kernel.SubmitCodeAsync(@"#!razor
+            @using System
+            @using System.Linq
+            @{
+                var date = new DateTime(2021, 3, 15);
+            }
+
+            <p>@date.ToString(""yyyy-MM-dd"")</p>
+            ");
+
+            // Assert
+            KernelEvents
+                .Should()
+                .ContainSingle<DisplayEvent>()
+                .Which
+                .FormattedValues
+                .Should()
+                .ContainSingle(v => v.MimeType == "text/html")
+                .Which
+                .Value
+                .Should()
+                .Contain($"2021-03-15");
         }
 
         // TODO: we need to be able to see the other dotnet kernel variables if they are shared.
