@@ -1,0 +1,14 @@
+version: 2
+updates:
+- package-ecosystem: nuget
+  directory: "/src/RazorInteractive"
+  schedule:
+    interval: daily
+    time: "10:00"
+  open-pull-requests-limit: 10
+- package-ecosystem: nuget
+  directory: "/tests/RazorInteractive.Tests"
+  schedule:
+    interval: daily
+    time: "10:00"
+  open-pull-requests-limit: 10
