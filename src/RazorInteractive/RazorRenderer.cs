@@ -6,9 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Html;
+using Microsoft.DotNet.Interactive.Formatting;
 using RazorLight;
-
-using static Microsoft.DotNet.Interactive.Formatting.PocketViewTags;
 
 namespace RazorInteractive
 {
@@ -33,7 +32,7 @@ namespace RazorInteractive
 
             var id = "razorExtension" + Guid.NewGuid().ToString("N");
 
-            return div[id: id](str(result));
+            return Html.ToHtmlContent($"<div id=\"{id}\">{result}</div>");
         }
 
         private static string GetHashString(string inputString)
