@@ -224,7 +224,7 @@ namespace RazorInteractive.Tests
         }
 
         [Fact]
-        public async Task It_displays_standard_error_when_razor_doesnt_compile_or_render()
+        public async Task It_fails_when_razor_doesnt_compile_or_render()
         {
             // Arrange
             using var events = _kernel.KernelEvents.ToSubscribedList();
@@ -233,10 +233,9 @@ namespace RazorInteractive.Tests
             await _kernel.SubmitCodeAsync(@"#!razor
             @variable_does_not_exists");
 
-            // Assert
             KernelEvents
-            .Should()
-            .ContainSingle<StandardErrorValueProduced>(); // StandardErrorValueProduced
+                .Should()
+                .ContainSingle<CommandFailed>();
         }
 
         [Fact]
@@ -299,49 +298,45 @@ namespace RazorInteractive.Tests
                 .Contain($"2021-03-15");
         }
 
-        // TODO: we need to be able to see the other dotnet kernel variables if they are shared.
-        // TODO: review if the cell SubmitCode command needs to start with a #!razor or if we can have a #!share above...
-        // //         [Fact]
-        // //         public async Task It_can_see_dotnet_fsharp_kernel_variables_in_model()
-        // //         {
-        // //             // Arrange
-        // //             var before = "BEFORE";
-        // //             var after = "AFTER";
+        [Fact]
+        public async Task It_can_see_dotnet_fsharp_kernel_variables_in_model()
+        {
+            // Arrange
+            var before = "BEFORE";
+            var after = "AFTER";
 
-        // //             var commands = new[]
-        // //                     {
-        // //                         "#!fsharp\nlet mutable x = 1",
-        // //                         "#!fsharp\nx <- 2",
-        // //                         "#!fsharp\nlet y = \"hi!\"",
-        // //                         "#!fsharp\nlet z = [| x :> obj; y :> obj |]",
-        // //                     };
+            var commands = new[]
+                    {
+                                 "#!fsharp\nlet mutable x = 1",
+                                 "#!fsharp\nx <- 2",
+                                 "#!fsharp\nlet y = \"hi!\"",
+                                 "#!fsharp\nlet z = [| x :> obj; y :> obj |]",
+                             };
 
-        // //             foreach (var command in commands)
-        // //             {
-        // //                 await _kernel.SendAsync(new SubmitCode(command));
-        // //             }
+            foreach (var command in commands)
+            {
+                await _kernel.SendAsync(new SubmitCode(command));
+            }
 
-        // //             using var events = _kernel.KernelEvents.ToSubscribedList();
+            using var events = _kernel.KernelEvents.ToSubscribedList();
 
-        // //             // Act
-        // //             await _kernel.SubmitCodeAsync($@"
-        // // #!share --from fsharp x
-        // // #!razor
-        // // {before} @Model.x {after}");
+            // Act
+            await _kernel.SubmitCodeAsync($@"#!razor
+         {before} @Model.x {after}");
 
-        // //             // Assert
-        // //             KernelEvents
-        // //                 .Should()
-        // //                 .ContainSingle<DisplayEvent>()
-        // //                 .Which
-        // //                 .FormattedValues
-        // //                 .Should()
-        // //                 .ContainSingle(v => v.MimeType == "text/html")
-        // //                 .Which
-        // //                 .Value
-        // //                 .Should()
-        // //                 .Contain($"{before} 2 {after}");
-        // //         }
+            // Assert
+            KernelEvents
+                .Should()
+                .ContainSingle<DisplayEvent>()
+                .Which
+                .FormattedValues
+                .Should()
+                .ContainSingle(v => v.MimeType == "text/html")
+                .Which
+                .Value
+                .Should()
+                .Contain($"{before} 2 {after}");
+        }
 
         [Fact]
         public async Task It_renders_html_and_not_html_encoded_html()
