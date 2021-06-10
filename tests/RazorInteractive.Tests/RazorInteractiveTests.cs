@@ -20,8 +20,8 @@ namespace RazorInteractive.Tests
         {
             _kernel = new CompositeKernel
             {
-                new CSharpKernel(),
-                new FSharpKernel()
+                new CSharpKernel().UseNugetDirective(),
+                new FSharpKernel().UseNugetDirective()
             };
 
             Task.Run(() => new RazorKernelExtension().OnLoadAsync(_kernel))
