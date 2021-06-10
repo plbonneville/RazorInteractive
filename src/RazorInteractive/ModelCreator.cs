@@ -44,7 +44,9 @@ namespace RazorInteractive
                 .Select(name =>
                 {
                     dotNetKernel.TryGetVariable(name, out object value);
-                    return new CurrentVariable(name, value.GetType(), value);
+                    return new CurrentVariable(name, GetType(value), value);
+
+                    static Type GetType<T>(T variable) => typeof(T);
                 })
                 .Aggregate(new ExpandoObject() as IDictionary<string, object>,
                 (dictionary, variable) =>
