@@ -20,8 +20,8 @@ namespace RazorInteractive.Tests
         {
             _kernel = new CompositeKernel
             {
-                new CSharpKernel(),
-                new FSharpKernel()
+                new CSharpKernel().UseNugetDirective(),
+                new FSharpKernel().UseNugetDirective()
             };
 
             Task.Run(() => new RazorKernelExtension().OnLoadAsync(_kernel))
@@ -360,6 +360,43 @@ namespace RazorInteractive.Tests
                 .Value
                 .Should()
                 .Contain("<h1>hello world</h1>");
+        }
+
+        [Fact]
+        public async Task It_can_see_null_dotnet_kernel_variables_in_model()
+        {
+            // Arrange
+            const string before = "BEFORE";
+            const string after = "AFTER";
+
+            var commands = new[]
+                {
+                    "string s = null;"
+                };
+
+            foreach (var command in commands)
+            {
+                await _kernel.SendAsync(new SubmitCode(command));
+            }
+
+            using var events = _kernel.KernelEvents.ToSubscribedList();
+
+            // Act
+            await _kernel.SubmitCodeAsync($@"#!razor
+            {before} @(Model.s ?? ""isnull"") {after}");
+
+            // Assert
+            KernelEvents
+                .Should()
+                .ContainSingle<DisplayEvent>()
+                .Which
+                .FormattedValues
+                .Should()
+                .ContainSingle(v => v.MimeType == "text/html")
+                .Which
+                .Value
+                .Should()
+                .Contain($"{before} isnull {after}");
         }
     }
 }
