@@ -1,0 +1,54 @@
+#!pwsh
+
+# 0. Clean-up the bin and obj folders
+get-childitem .. -Filter "bin" -recurse | foreach ($_) {remove-item $_.fullname -Force -recurse}
+get-childitem .. -Filter "obj" -recurse | foreach ($_) {remove-item $_.fullname -Force -recurse}
+
+# 1. Build the project
+dotnet build ../src/RazorInteractive/RazorInteractive.csproj
+
+# Pack up the NuGet package. Note, you should increment the version because the previous one, once installed, will be in your NuGet cache
+$version = [System.DateTime]::Now.ToString("yyyy.MM.dd.HHmmss")
+dotnet pack /p:PackageVersion=$version ../src/RazorInteractive/RazorInteractive.csproj
+
+# 3. Check that the package is there
+Get-ChildItem .. -Recurse *.nupkg
+
+#!csharp
+
+#i nuget:/workspaces/RazorInteractive/src/RazorInteractive/bin/Debug
+#r "nuget:RazorInteractive"
+
+#!csharp
+
+#!razor
+
+@{
+    var colors = new [] { "red", "green", "blue" };
+}
+
+<ol>
+@foreach(var color in colors)
+{
+    <li style="color: @color;">@color</li>
+}
+</ol>
+
+#!csharp
+
+var firstname = "John";
+var lastname = "Doe";
+var colors = new [] { "red", "green", "blue" };
+
+#!csharp
+
+#!razor
+
+<p>Hello <b>@Model.firstname @Model.lastname</b>, what is you favorite a color?</p>
+
+<ol>
+@foreach(var color in Model.colors)
+{
+    <li style="color: @color;">@color</li>
+}
+</ol>
