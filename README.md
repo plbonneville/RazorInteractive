@@ -25,7 +25,7 @@ Using the `#!razor` magic command your code cell will be parsed by a Razor engin
 </ol>
 ```
 
-The dotnet kernel variables are all available through the `@Model` property.
+The C# and F# kernel variables are all available through the `@Model` property.
 
 ```csharp
 var firstname = "John";
