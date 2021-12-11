@@ -4,6 +4,8 @@ using System.Dynamic;
 using System.Linq;
 
 using Microsoft.DotNet.Interactive;
+using Microsoft.DotNet.Interactive.CSharp;
+using Microsoft.DotNet.Interactive.FSharp;
 
 namespace RazorInteractive
 {
@@ -25,9 +27,18 @@ namespace RazorInteractive
                     }
                 }
             }
-            else if (kernel is DotNetKernel dotnetKernel)
+            else if (kernel is CSharpKernel csharpKernel)
             {
-                var tempModel = dotnetKernel.CreateModelFromCurrentVariables();
+                var tempModel = csharpKernel.CreateModelFromCurrentVariables();
+
+                foreach (var item in tempModel)
+                {
+                    model.TryAdd(item.Key, item.Value);
+                }
+            }
+            else if (kernel is FSharpKernel fsharpKernel)
+            {
+                var tempModel = fsharpKernel.CreateModelFromCurrentVariables();
 
                 foreach (var item in tempModel)
                 {
@@ -38,16 +49,20 @@ namespace RazorInteractive
             return model;
         }
 
-        private static IDictionary<string, object> CreateModelFromCurrentVariables(this DotNetKernel dotNetKernel)
-            => dotNetKernel
-                ?.GetVariableNames()
-                .Select(name =>
+        private static IDictionary<string, object> CreateModelFromCurrentVariables(this CSharpKernel csharpKernel)
+            => csharpKernel
+                ?.ScriptState
+                ?.Variables
+                .Aggregate(new ExpandoObject() as IDictionary<string, object>,
+                (dictionary, variable) =>
                 {
-                    dotNetKernel.TryGetVariable(name, out object value);
-                    return new CurrentVariable(name, GetType(value), value);
+                    dictionary.Add(variable.Name, variable.Value);
+                    return dictionary;
+                }) ?? new Dictionary<string, object>();
 
-                    static Type GetType<T>(T variable) => typeof(T);
-                })
+        private static IDictionary<string, object> CreateModelFromCurrentVariables(this FSharpKernel fsharpKernel)
+            => fsharpKernel
+                ?.GetValues()
                 .Aggregate(new ExpandoObject() as IDictionary<string, object>,
                 (dictionary, variable) =>
                 {

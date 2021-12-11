@@ -1,11 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <IncludeBuildOutput>true</IncludeBuildOutput>
     <IsPackable>true</IsPackable>
     <PackageDescription>Renders Razor markup in dotnet-interactive notebooks.</PackageDescription>
-    <Version>1.0.5</Version>
+    <Version>1.0.6</Version>
     <NoWarn>$(NoWarn);NU5100,NU5104</NoWarn>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <Deterministic>true</Deterministic>
@@ -33,14 +33,21 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.DotNet.Interactive" Version="1.0.0-beta.21255.3" />
-    <PackageReference Include="Microsoft.DotNet.Interactive.Formatting" Version="1.0.0-beta.21255.3" />  
+    <PackageReference Include="Microsoft.DotNet.Interactive" Version="1.0.0-beta.21606.1" />
+    <PackageReference Include="Microsoft.DotNet.Interactive.CSharp" Version="1.0.0-beta.21606.1" />
+    <PackageReference Include="Microsoft.DotNet.Interactive.Formatting" Version="1.0.0-beta.21606.1" />
+    <PackageReference Include="Microsoft.DotNet.Interactive.FSharp" Version="1.0.0-beta.21606.1" />
     <PackageReference Include="RazorLight" Version="2.0.0-rc.3" />
   </ItemGroup>
 
   <ItemGroup>
     <!-- Needed when running on the docker jupyter/base-notebook image -->
     <PackageReference Include="System.Runtime.InteropServices.WindowsRuntime" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Seems like RazorLight won't run without Sqlite -->
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.0" />
   </ItemGroup>
 
 </Project>

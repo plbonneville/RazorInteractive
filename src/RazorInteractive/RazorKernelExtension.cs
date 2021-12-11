@@ -25,6 +25,7 @@ namespace RazorInteractive
 <details>
     <summary>Renders the code block as Razor markup in dotnet-interactive notebooks.</summary>
     <p>This extension adds a new kernel that can render Razor markdown.</p>
+    <p>All C# and F# variables are available in the <code>@Model</code> property.</p>
 </details>");
 
             var formattedValue = new FormattedValue(

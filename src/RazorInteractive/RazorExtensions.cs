@@ -35,6 +35,13 @@ namespace RazorInteractive
                 {
                     html = await GenerateHtmlAsync(markdown.Value, model);
                 })
+                .ContinueWith(x =>
+                {
+                    if (x.IsFaulted)
+                    {
+                        throw x.Exception;
+                    }
+                })
                 .Wait();
 
                 html.WriteTo(writer, HtmlEncoder.Default);
