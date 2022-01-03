@@ -52,7 +52,11 @@ namespace RazorInteractive.Tests
                 .Which
                 .Command
                 .Should()
-                .Equals("#!razor");
+                .BeAssignableTo<SubmitCode>()
+                .Which
+                .Code
+                .Should()
+                .Be("#!razor");
         }
 
         [Fact]
