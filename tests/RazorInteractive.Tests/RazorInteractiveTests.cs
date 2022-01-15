@@ -402,5 +402,43 @@ namespace RazorInteractive.Tests
                 .Should()
                 .Contain($"{before} isnull {after}");
         }
+
+        [Fact]
+        public async Task It_doesnt_throw_exception_when_variable_is_redefined()
+        {
+            // Arrange
+            const string before = "BEFORE";
+            const string after = "AFTER";
+
+            var commands = new[]
+                {
+                    @"string s = ""one"";",
+                    @"int s = 2;",
+                };
+
+            foreach (var command in commands)
+            {
+                await _kernel.SendAsync(new SubmitCode(command));
+            }
+
+            using var events = _kernel.KernelEvents.ToSubscribedList();
+
+            // Act
+            await _kernel.SubmitCodeAsync($@"#!razor
+            {before} @(Model.s) {after}");
+
+            // Assert
+            KernelEvents
+                .Should()
+                .ContainSingle<DisplayEvent>()
+                .Which
+                .FormattedValues
+                .Should()
+                .ContainSingle(v => v.MimeType == "text/html")
+                .Which
+                .Value
+                .Should()
+                .Contain($"{before} 2 {after}");
+        }
     }
 }
