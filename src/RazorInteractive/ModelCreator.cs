@@ -56,7 +56,7 @@ namespace RazorInteractive
                 .Aggregate(new ExpandoObject() as IDictionary<string, object>,
                 (dictionary, variable) =>
                 {
-                    dictionary.Add(variable.Name, variable.Value);
+                    dictionary[variable.Name] = variable.Value;
                     return dictionary;
                 }) ?? new Dictionary<string, object>();
 
@@ -66,7 +66,7 @@ namespace RazorInteractive
                 .Aggregate(new ExpandoObject() as IDictionary<string, object>,
                 (dictionary, variable) =>
                 {
-                    dictionary.Add(variable.Name, variable.Value);
+                    dictionary[variable.Name] = variable.Value;
                     return dictionary;
                 }) ?? new Dictionary<string, object>();
     }
