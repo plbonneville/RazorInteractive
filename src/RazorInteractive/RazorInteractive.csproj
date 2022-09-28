@@ -36,7 +36,7 @@
     <PackageReference Include="Microsoft.DotNet.Interactive" Version="1.0.0-beta.21606.1" />
     <PackageReference Include="Microsoft.DotNet.Interactive.CSharp" Version="1.0.0-beta.21606.1" />
     <PackageReference Include="Microsoft.DotNet.Interactive.Formatting" Version="1.0.0-beta.21606.1" />
-    <PackageReference Include="Microsoft.DotNet.Interactive.FSharp" Version="1.0.0-beta.21606.1" />
+    <PackageReference Include="Microsoft.DotNet.Interactive.FSharp" Version="1.0.0-beta.22452.2" />
     <PackageReference Include="RazorLight" Version="2.0.0-rc.3" />
   </ItemGroup>
 
