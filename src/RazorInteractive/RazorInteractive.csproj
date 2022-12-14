@@ -47,7 +47,7 @@
 
   <ItemGroup>
     <!-- Seems like RazorLight won't run without Sqlite -->
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.1" />
   </ItemGroup>
 
 </Project>
