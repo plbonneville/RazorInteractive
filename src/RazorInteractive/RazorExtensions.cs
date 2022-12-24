@@ -29,16 +29,7 @@ public static class RazorExtensions
 
             Task.Run(async () =>
             {
-                try
-                {
-                    html = await GenerateHtmlAsync(markdown.Value, model);
-                }
-                catch (Exception e)
-                {
-                    if (e.InnerException is not null)
-                    { }
-                    throw;
-                }
+                html = await GenerateHtmlAsync(markdown.Value, model);
             })
             .Wait();
 
