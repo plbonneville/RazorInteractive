@@ -1,14 +1,13 @@
-﻿namespace RazorInteractive
+﻿namespace RazorInteractive;
+
+public class RazorMarkdown
 {
-    public class RazorMarkdown
+    public RazorMarkdown(string value)
     {
-        public RazorMarkdown(string value)
-        {
-            Value = value;
-        }
-
-        public string Value { get; }
-
-        public override string ToString() => Value;
+        Value = value;
     }
+
+    public string Value { get; }
+
+    public override string ToString() => Value;
 }

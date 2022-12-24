@@ -4,61 +4,60 @@ using Microsoft.AspNetCore.Html;
 using Microsoft.DotNet.Interactive;
 using Microsoft.DotNet.Interactive.Formatting;
 
-namespace RazorInteractive
+namespace RazorInteractive;
+
+public static class RazorExtensions
 {
-    public static class RazorExtensions
+    private static readonly string[] DeaultImports = new[]
     {
-        private static readonly string[] DeaultImports = new[]
-        {
-            "System",
-            "System.Text",
-            "System.Collections",
-            "System.Collections.Generic",
-            "System.Linq",
-            "System.Threading.Tasks"
-        };
+        "System",
+        "System.Text",
+        "System.Collections",
+        "System.Collections.Generic",
+        "System.Linq",
+        "System.Threading.Tasks"
+    };
 
-        public static T UseRazor<T>(this T kernel) where T : Kernel
+    public static T UseRazor<T>(this T kernel) where T : Kernel
+    {
+        Formatter.Register<RazorMarkdown>((markdown, writer) =>
         {
-            Formatter.Register<RazorMarkdown>((markdown, writer) =>
+            IHtmlContent html = new HtmlString("");
+
+            var model = kernel.CreateModelFromCurrentVariables();
+
+            Task.Run(async () =>
             {
-                IHtmlContent html = new HtmlString("");
-
-                var model = kernel.CreateModelFromCurrentVariables();
-
-                Task.Run(async () =>
+                try
                 {
-                    try
-                    {
-                        html = await GenerateHtmlAsync(markdown.Value, model);
-                    }
-                    catch (Exception e)
-                    {
-                        if (e.InnerException is not null)
-                        { }
-                        throw;
-                    }
-                })
-                .Wait();
+                    html = await GenerateHtmlAsync(markdown.Value, model);
+                }
+                catch (Exception e)
+                {
+                    if (e.InnerException is not null)
+                    { }
+                    throw;
+                }
+            })
+            .Wait();
 
-                html.WriteTo(writer, HtmlEncoder.Default);
+            html.WriteTo(writer, HtmlEncoder.Default);
 
-            }, HtmlFormatter.MimeType);
+        }, HtmlFormatter.MimeType);
 
-            return kernel;
-        }
+        return kernel;
+    }
 
-        private static async Task<IHtmlContent> GenerateHtmlAsync(string submittedMarkdown, IDictionary<string, object> model)
-        {
-            var renderer = new RazorRenderer();
+    private static async Task<IHtmlContent> GenerateHtmlAsync(string submittedMarkdown, IDictionary<string, object> model)
+    {
+        var renderer = new RazorRenderer();
 
-            var code = DeaultImports
-                .Aggregate(new StringBuilder(),
-                (sb, @namespace) => sb.AppendLine($"@using {@namespace}"));
+        var code = DeaultImports
+            .Aggregate(new StringBuilder(),
+            (sb, @namespace) => sb.AppendLine($"@using {@namespace}"));
 
-            code.Append(submittedMarkdown);
+        code.Append(submittedMarkdown);
 
-            return await renderer.ParseAsync(code.ToString(), model);
-        }
+        return await renderer.ParseAsync(code.ToString(), model);
     }
 }
