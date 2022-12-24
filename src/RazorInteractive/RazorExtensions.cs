@@ -9,7 +9,7 @@ namespace RazorInteractive;
 
 public static class RazorExtensions
 {
-    private static readonly string[] DeaultImports = new[]
+    private static readonly string[] DefaultImports = new[]
     {
         "System",
         "System.Text",
@@ -27,10 +27,7 @@ public static class RazorExtensions
 
             var model = kernel.CreateModelFromCurrentVariables();
 
-            Task.Run(async () =>
-            {
-                html = await GenerateHtmlAsync(markdown.Value, model);
-            })
+            Task.Run(async () => html = await GenerateHtmlAsync(markdown.Value, model))
             .Wait();
 
             html.WriteTo(writer, HtmlEncoder.Default);
@@ -44,7 +41,7 @@ public static class RazorExtensions
     {
         var renderer = new RazorRenderer();
 
-        var code = DeaultImports
+        var code = DefaultImports
             .Aggregate(new StringBuilder(),
             (sb, @namespace) => sb.AppendLine($"@using {@namespace}"));
 
