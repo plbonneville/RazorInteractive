@@ -1,7 +1,4 @@
-﻿using System;
-using System.CommandLine.Invocation;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Html;
+﻿using Microsoft.AspNetCore.Html;
 using Microsoft.DotNet.Interactive;
 using Microsoft.DotNet.Interactive.Commands;
 using Microsoft.DotNet.Interactive.Formatting;
