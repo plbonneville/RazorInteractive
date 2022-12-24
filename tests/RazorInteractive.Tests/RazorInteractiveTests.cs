@@ -49,10 +49,8 @@ namespace RazorInteractive.Tests
             KernelEvents
                 .Should()
                 .ContainSingle<CommandSucceeded>()
-                .Which
-                .Command
-                .Should()
-                .Equals("#!razor");
+                .Which.Command.Should().BeOfType<SubmitCode>()
+                .Which.Code.Should().Be("#!razor");
         }
 
         [Fact]
@@ -111,12 +109,16 @@ namespace RazorInteractive.Tests
             // Based on:
             //  https://github.com/dotnet/interactive/blob/main/src/Microsoft.DotNet.Interactive.Jupyter.Tests/MagicCommandTests.who_and_whos.cs
             var commands = new[]
-                {
-                    "var x = 1;",
-                    "x = 2;",
-                    "var y = \"hi\";",
-                    "var z = new object[] { x, y };"
-                };
+            {
+                //"var x = 1;",
+                //"x = 2;",
+                //"var y = \"hi\";",
+                //"var z = new object[] { x, y };"
+                "#!csharp\nvar x = 1;",
+                "#!csharp\nx = 2;",
+                "#!csharp\nvar y = \"hi\";",
+                "#!csharp\nvar z = new object[] { x, y };"
+            };
 
             foreach (var command in commands)
             {
@@ -151,12 +153,16 @@ namespace RazorInteractive.Tests
             const string after = "AFTER";
 
             var commands = new[]
-                {
-                    "var x = 1;",
-                    "x = 2;",
-                    "var y = \"hi\";",
-                    "var z = new object[] { x, y };"
-                };
+            {
+                //"var x = 1;",
+                //"x = 2;",
+                //"var y = \"hi\";",
+                //"var z = new object[] { x, y };"
+                "#!csharp\nvar x = 1;",
+                "#!csharp\nx = 2;",
+                "#!csharp\nvar y = \"hi\";",
+                "#!csharp\nvar z = new object[] { x, y };"
+            };
 
             foreach (var command in commands)
             {
@@ -191,12 +197,16 @@ namespace RazorInteractive.Tests
             const string after = "AFTER";
 
             var commands = new[]
-                {
-                    "var x = 1;",
-                    "x = 2;",
-                    "var y = \"hi\";",
-                    "var z = new object[] { x, y };"
-                };
+            {
+                //"var x = 1;",
+                //"x = 2;",
+                //"var y = \"hi\";",
+                //"var z = new object[] { x, y };"
+                "#!csharp\nvar x = 1;",
+                "#!csharp\nx = 2;",
+                "#!csharp\nvar y = \"hi\";",
+                "#!csharp\nvar z = new object[] { x, y };"
+            };
 
             foreach (var command in commands)
             {
@@ -306,16 +316,18 @@ namespace RazorInteractive.Tests
             var after = "AFTER";
 
             var commands = new[]
-                    {
-                                 "#!fsharp\nlet mutable x = 1",
-                                 "#!fsharp\nx <- 2",
-                                 "#!fsharp\nlet y = \"hi!\"",
-                                 "#!fsharp\nlet z = [| x :> obj; y :> obj |]",
-                             };
+            {
+                "#!fsharp\nlet mutable x = 1",
+                "#!fsharp\nx <- 2",
+                "#!fsharp\nlet y = \"hi!\"",
+                "#!fsharp\nlet z = [| x :> obj; y :> obj |]",
+            };
+
+            using var e = _kernel.KernelEvents.ToSubscribedList();
 
             foreach (var command in commands)
             {
-                await _kernel.SendAsync(new SubmitCode(command));
+                var r = await _kernel.SendAsync(new SubmitCode(command));
             }
 
             using var events = _kernel.KernelEvents.ToSubscribedList();
@@ -370,9 +382,9 @@ namespace RazorInteractive.Tests
             const string after = "AFTER";
 
             var commands = new[]
-                {
-                    "string s = null;"
-                };
+            {
+                "#!csharp\nstring s = null;"
+            };
 
             foreach (var command in commands)
             {
@@ -397,6 +409,27 @@ namespace RazorInteractive.Tests
                 .Value
                 .Should()
                 .Contain($"{before} isnull {after}");
+        }
+    }
+
+    public enum Language
+    {
+        CSharp,
+        FSharp,
+        PowerShell
+    }
+
+    public static class LanguageExtensions
+    {
+        public static string LanguageName(this Language language)
+        {
+            return language switch
+            {
+                Language.CSharp => "csharp",
+                Language.FSharp => "fsharp",
+                Language.PowerShell => "pwsh",
+                _ => null
+            };
         }
     }
 }

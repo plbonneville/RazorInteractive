@@ -33,7 +33,16 @@ namespace RazorInteractive
 
                 Task.Run(async () =>
                 {
-                    html = await GenerateHtmlAsync(markdown.Value, model);
+                    try
+                    {
+                        html = await GenerateHtmlAsync(markdown.Value, model);
+                    }
+                    catch (Exception e)
+                    {
+                        if (e.InnerException is not null)
+                        { }
+                        throw;
+                    }
                 })
                 .Wait();
 
