@@ -73,7 +73,9 @@ public class RazorInteractiveTests : IDisposable
     [Fact]
     public async Task It_can_interprets_RazorCode()
     {
-        const string code =
+        using var events = _kernel.KernelEvents.ToSubscribedList();
+
+        await _kernel.SubmitCodeAsync(
             """
             #!razor
 
@@ -84,10 +86,7 @@ public class RazorInteractiveTests : IDisposable
             < h2 >
                 Hello world @name!
             </ h2 >
-            """;
-
-        using var events = _kernel.KernelEvents.ToSubscribedList();
-        await _kernel.SubmitCodeAsync(code);
+            """);
 
         KernelEvents
             .Should()
