@@ -19,6 +19,11 @@ public static class RazorExtensions
         "System.Threading.Tasks"
     };
 
+    /// <summary>
+    /// Registers the type <see cref="RazorMarkdown"/> as a formatter.
+    /// </summary>
+    /// <param name="kernel">A <see cref="Kernel"/>.</param>
+    /// <returns>A reference to this instance after the operation has completed.</returns>
     public static T UseRazor<T>(this T kernel) where T : Kernel
     {
         Formatter.Register<RazorMarkdown>((markdown, writer) =>

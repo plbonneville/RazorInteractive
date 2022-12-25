@@ -9,6 +9,10 @@ public class RazorKernelExtension : IKernelExtension, IStaticContentSource
 {
     public string Name => "Razor";
 
+    /// <summary>
+    /// When the composite kernel is loaded, add a Razor kernel and register the Razor formatter.
+    /// </summary>
+    /// <param name="kernel">Must be of type <see cref="CompositeKernel"/>.</param>
     public async Task OnLoadAsync(Kernel kernel)
     {
         if (kernel is CompositeKernel compositeKernel)
