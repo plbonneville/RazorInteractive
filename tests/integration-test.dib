@@ -5,8 +5,7 @@
 #!pwsh
 
 # 0. Clean-up the bin and obj folders
-get-childitem .. -Filter "bin" -recurse | foreach ($_) {remove-item $_.fullname -Force -recurse}
-get-childitem .. -Filter "obj" -recurse | foreach ($_) {remove-item $_.fullname -Force -recurse}
+Get-ChildItem .. -Include bin,obj -Recurse | Remove-Item -Force -Recurse
 
 # 1. Build the project
 dotnet build ../src/RazorInteractive/RazorInteractive.csproj
