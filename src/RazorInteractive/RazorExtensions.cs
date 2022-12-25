@@ -28,7 +28,7 @@ public static class RazorExtensions
     {
         Formatter.Register<RazorMarkdown>((markdown, writer) =>
         {
-            IHtmlContent html = new HtmlString("");
+            IHtmlContent html = new HtmlString(string.Empty);
 
             var model = kernel.CreateModelFromCurrentVariables();
 
