@@ -25,11 +25,13 @@ public class RazorKernelExtension : IKernelExtension, IStaticContentSource
 
         compositeKernel.UseRazor();
 
-        var message = new HtmlString(@"
-<details>
-    <summary>Renders the code block as Razor markup in dotnet-interactive notebooks.</summary>
-    <p>This extension adds a new kernel that can render Razor markdown.</p>
-</details>");
+        var message = new HtmlString(
+            """
+			<details>
+				<summary>Renders the code block as Razor markup in dotnet-interactive notebooks.</summary>
+				<p>This extension adds a new kernel that can render Razor markdown.</p>
+			</details>
+			""");
 
         var formattedValue = new FormattedValue(
             HtmlFormatter.MimeType,
