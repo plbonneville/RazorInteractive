@@ -112,14 +112,25 @@ public class RazorInteractiveTests : IDisposable
         //  https://github.com/dotnet/interactive/blob/main/src/Microsoft.DotNet.Interactive.Jupyter.Tests/MagicCommandTests.who_and_whos.cs
         var commands = new[]
         {
-            //"var x = 1;",
-            //"x = 2;",
-            //"var y = \"hi\";",
-            //"var z = new object[] { x, y };"
-            "#!csharp\nvar x = 1;",
-            "#!csharp\nx = 2;",
-            "#!csharp\nvar y = \"hi\";",
-            "#!csharp\nvar z = new object[] { x, y };"
+            """
+            #!csharp
+            var x = 1;
+            """,
+
+            """
+            #!csharp
+            x = 2;
+            """,
+
+            """
+            #!csharp
+            var y = "hi";
+            """,
+
+            """
+            #!csharp
+            var z = new object[] { x, y };
+            """,
         };
 
         foreach (var command in commands)
@@ -159,14 +170,25 @@ public class RazorInteractiveTests : IDisposable
 
         var commands = new[]
         {
-            //"var x = 1;",
-            //"x = 2;",
-            //"var y = \"hi\";",
-            //"var z = new object[] { x, y };"
-            "#!csharp\nvar x = 1;",
-            "#!csharp\nx = 2;",
-            "#!csharp\nvar y = \"hi\";",
-            "#!csharp\nvar z = new object[] { x, y };"
+            """
+            #!csharp
+            var x = 1;
+            """,
+
+            """
+            #!csharp
+            x = 2;
+            """,
+
+            """
+            #!csharp
+            var y = "hi";
+            """,
+
+            """
+            #!csharp
+            var z = new object[] { x, y };
+            """,
         };
 
         foreach (var command in commands)
@@ -206,14 +228,25 @@ public class RazorInteractiveTests : IDisposable
 
         var commands = new[]
         {
-            //"var x = 1;",
-            //"x = 2;",
-            //"var y = \"hi\";",
-            //"var z = new object[] { x, y };"
-            "#!csharp\nvar x = 1;",
-            "#!csharp\nx = 2;",
-            "#!csharp\nvar y = \"hi\";",
-            "#!csharp\nvar z = new object[] { x, y };"
+            """
+            #!csharp
+            var x = 1;
+            """,
+
+            """
+            #!csharp
+            x = 2;
+            """,
+
+            """
+            #!csharp
+            var y = "hi";
+            """,
+
+            """
+            #!csharp
+            var z = new object[] { x, y };
+            """,
         };
 
         foreach (var command in commands)
@@ -335,17 +368,30 @@ public class RazorInteractiveTests : IDisposable
 
         var commands = new[]
         {
-            "#!fsharp\nlet mutable x = 1",
-            "#!fsharp\nx <- 2",
-            "#!fsharp\nlet y = \"hi!\"",
-            "#!fsharp\nlet z = [| x :> obj; y :> obj |]",
-        };
+            """
+            #!fsharp
+            let mutable x = 1
+            """,
 
-        using var e = _kernel.KernelEvents.ToSubscribedList();
+            """
+            #!fsharp
+            x <- 2
+            """,
+
+            """
+            #!fsharp
+            let y = "hi!"
+            """,
+
+            """
+            #!fsharp
+            let z = [| x :> obj; y :> obj |]
+            """,
+        };
 
         foreach (var command in commands)
         {
-            var r = await _kernel.SendAsync(new SubmitCode(command));
+            await _kernel.SendAsync(new SubmitCode(command));
         }
 
         using var events = _kernel.KernelEvents.ToSubscribedList();
@@ -407,7 +453,10 @@ public class RazorInteractiveTests : IDisposable
 
         var commands = new[]
         {
-            "#!csharp\nstring s = null;"
+            """
+            #!csharp
+            string s = null;
+            """
         };
 
         foreach (var command in commands)
