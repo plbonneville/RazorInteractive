@@ -55,8 +55,11 @@ public class RazorInteractiveTests : IDisposable
     {
         using var events = _kernel.KernelEvents.ToSubscribedList();
 
-        await _kernel.SubmitCodeAsync(@"#!razor
-<h1>hello world</h>");
+        await _kernel.SubmitCodeAsync(
+            """
+            #!razor
+            <h1>hello world</h>
+            """);
 
         KernelEvents
             .Should()
@@ -70,15 +73,18 @@ public class RazorInteractiveTests : IDisposable
     [Fact]
     public async Task It_can_interprets_RazorCode()
     {
-        const string code = @"#!razor
+        const string code =
+            """
+            #!razor
 
-@{
-    string name = ""Alice"";
-}
+            @{
+                string name = "Alice";
+            }
 
-<h2>
-    Hello world @name!
-</h2>";
+            < h2 >
+                Hello world @name!
+            </ h2 >
+            """;
 
         using var events = _kernel.KernelEvents.ToSubscribedList();
         await _kernel.SubmitCodeAsync(code);
@@ -125,8 +131,11 @@ public class RazorInteractiveTests : IDisposable
         using var events = _kernel.KernelEvents.ToSubscribedList();
 
         // Act
-        await _kernel.SubmitCodeAsync($@"#!razor
-            {before} @Model.x {after}");
+        await _kernel.SubmitCodeAsync(
+            $"""
+            #!razor
+            {before} @Model.x {after}
+            """);
 
         // Assert
         KernelEvents
@@ -169,8 +178,11 @@ public class RazorInteractiveTests : IDisposable
         using var events = _kernel.KernelEvents.ToSubscribedList();
 
         // Act
-        await _kernel.SubmitCodeAsync($@"#!razor
-            {before} @Model.y {after}");
+        await _kernel.SubmitCodeAsync(
+            $"""
+            #!razor
+            {before} @Model.y {after}
+            """);
 
         // Assert
         KernelEvents
@@ -213,8 +225,11 @@ public class RazorInteractiveTests : IDisposable
         using var events = _kernel.KernelEvents.ToSubscribedList();
 
         // Act
-        await _kernel.SubmitCodeAsync($@"#!razor
-            {before} @Model.z[0] @Model.z[1] {after}");
+        await _kernel.SubmitCodeAsync(
+            $"""
+            #!razor
+            {before} @Model.z[0] @Model.z[1] {after}
+            """);
 
         // Assert
         KernelEvents
@@ -237,8 +252,11 @@ public class RazorInteractiveTests : IDisposable
         using var events = _kernel.KernelEvents.ToSubscribedList();
 
         // Act
-        await _kernel.SubmitCodeAsync(@"#!razor
-            @variable_does_not_exists");
+        await _kernel.SubmitCodeAsync(
+            """
+            #!razor
+            @variable_does_not_exists
+            """);
 
         KernelEvents
             .Should()
@@ -252,13 +270,15 @@ public class RazorInteractiveTests : IDisposable
         using var events = _kernel.KernelEvents.ToSubscribedList();
 
         // Act
-        await _kernel.SubmitCodeAsync(@"#!razor
+        await _kernel.SubmitCodeAsync(
+            """
+            #!razor
             @{
                 var date = new DateTime(2021, 1, 3);
             }
 
-            <p>@date.ToString(""yyyy-MM-dd"")</p>
-            ");
+            <p>@date.ToString("yyyy-MM-dd")</p>
+            """);
 
         // Assert
         KernelEvents
@@ -281,15 +301,17 @@ public class RazorInteractiveTests : IDisposable
         using var events = _kernel.KernelEvents.ToSubscribedList();
 
         // Act
-        await _kernel.SubmitCodeAsync(@"#!razor
+        await _kernel.SubmitCodeAsync(
+            """
+            #!razor
             @using System
             @using System.Linq
             @{
                 var date = new DateTime(2021, 3, 15);
             }
 
-            <p>@date.ToString(""yyyy-MM-dd"")</p>
-            ");
+            <p>@date.ToString("yyyy-MM-dd")</p>
+            """);
 
         // Assert
         KernelEvents
@@ -330,8 +352,11 @@ public class RazorInteractiveTests : IDisposable
         using var events = _kernel.KernelEvents.ToSubscribedList();
 
         // Act
-        await _kernel.SubmitCodeAsync($@"#!razor
-         {before} @Model.x {after}");
+        await _kernel.SubmitCodeAsync(
+            $"""
+            #!razor
+            {before} @Model.x {after}
+            """);
 
         // Assert
         KernelEvents
@@ -354,8 +379,11 @@ public class RazorInteractiveTests : IDisposable
         using var events = _kernel.KernelEvents.ToSubscribedList();
 
         // Act
-        await _kernel.SubmitCodeAsync(@"#!razor
-            <h1>hello world</h1>");
+        await _kernel.SubmitCodeAsync(
+            """
+            #!razor
+            <h1>hello world</h1>
+            """);
 
         // Assert
         KernelEvents
@@ -391,8 +419,11 @@ public class RazorInteractiveTests : IDisposable
         using var events = _kernel.KernelEvents.ToSubscribedList();
 
         // Act
-        await _kernel.SubmitCodeAsync($@"#!razor
-            {before} @(Model.s ?? ""isnull"") {after}");
+        await _kernel.SubmitCodeAsync(
+            $"""
+            #!razor
+            {before} @(Model.s ?? "isnull") {after}
+            """);
 
         // Assert
         KernelEvents
