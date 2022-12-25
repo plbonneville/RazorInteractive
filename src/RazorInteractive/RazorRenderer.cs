@@ -28,7 +28,7 @@ internal sealed class RazorRenderer
 
         var id = "razorExtension" + Guid.NewGuid().ToString("N");
 
-        return Html.ToHtmlContent($"<div id=\"{id}\">{result}</div>");
+        return Html.ToHtmlContent($"""<div id="{id}">{result}</div>""");
     }
 
     private static string GetHashString(string inputString)
