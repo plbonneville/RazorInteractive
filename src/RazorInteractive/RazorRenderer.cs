@@ -32,8 +32,7 @@ internal sealed class RazorRenderer
     }
 
     private static string GetHashString(string inputString)
-        => SHA256.Create()
-        .ComputeHash(Encoding.UTF8.GetBytes(inputString))
+        => SHA256.HashData(Encoding.UTF8.GetBytes(inputString))
         .Aggregate(new StringBuilder(),
             (sb, b) => sb.Append(b.ToString("X2")))
         .ToString();
