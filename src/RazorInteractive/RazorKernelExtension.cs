@@ -15,12 +15,15 @@ public class RazorKernelExtension : IKernelExtension, IStaticContentSource
     /// <param name="kernel">Must be of type <see cref="CompositeKernel"/>.</param>
     public async Task OnLoadAsync(Kernel kernel)
     {
-        if (kernel is CompositeKernel compositeKernel)
+        if (kernel is not CompositeKernel compositeKernel)
         {
-            compositeKernel.Add(new RazorKernel());
+            throw new InvalidOperationException("The Razor kernel can only be added into a CompositeKernel.");
         }
 
-        kernel.UseRazor();
+        // Add a RazorKernel as a child kernel to the CompositeKernel
+        compositeKernel.Add(new RazorKernel());
+
+        compositeKernel.UseRazor();
 
         var message = new HtmlString(@"
 <details>
@@ -32,6 +35,6 @@ public class RazorKernelExtension : IKernelExtension, IStaticContentSource
             HtmlFormatter.MimeType,
             message.ToDisplayString(HtmlFormatter.MimeType));
 
-        await kernel.SendAsync(new DisplayValue(formattedValue, Guid.NewGuid().ToString()));
+        await compositeKernel.SendAsync(new DisplayValue(formattedValue, Guid.NewGuid().ToString()));
     }
 }
