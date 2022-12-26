@@ -1,73 +1,57 @@
-using System;
-using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Dynamic;
-using System.Linq;
 
 using Microsoft.DotNet.Interactive;
 using Microsoft.DotNet.Interactive.CSharp;
 using Microsoft.DotNet.Interactive.FSharp;
 
-namespace RazorInteractive
+namespace RazorInteractive;
+
+internal static class ModelCreator
 {
-    internal static class ModelCreator
+    /// <summary>
+    /// Create a model from the variables in the C# and F# kernels.
+    /// </summary>
+    /// <param name="kernel">The <see cref="Kernel"/>.</param>
+    /// <returns>An <see cref="ExpandoObject"/> object that holds all available C# and F# variables.</returns>
+    public static IDictionary<string, object> CreateModelFromCurrentVariables(this Kernel kernel)
     {
-        public static IDictionary<string, object> CreateModelFromCurrentVariables(this Kernel kernel)
+        var tempModel = kernel switch
         {
-            var model = new ExpandoObject() as IDictionary<string, object>;
+            CSharpKernel csharpKernel => csharpKernel.GetVariables(),
+            FSharpKernel fsharpKernel => fsharpKernel.GetVariables(),
+            CompositeKernel compositeKernel => compositeKernel.SelectMany(x => x.CreateModelFromCurrentVariables()),
+            _ => ImmutableDictionary<string, object>.Empty
+        };
 
-            if (kernel is CompositeKernel compositeKernel)
-            {
-                foreach (var childKernel in compositeKernel.ChildKernels)
-                {
-                    var tempModel = childKernel.CreateModelFromCurrentVariables();
+        var model = new ExpandoObject() as IDictionary<string, object>;
 
-                    foreach (var item in tempModel)
-                    {
-                        model.TryAdd(item.Key, item.Value);
-                    }
-                }
-            }
-            else if (kernel is CSharpKernel csharpKernel)
-            {
-                var tempModel = csharpKernel.CreateModelFromCurrentVariables();
-
-                foreach (var item in tempModel)
-                {
-                    model.TryAdd(item.Key, item.Value);
-                }
-            }
-            else if (kernel is FSharpKernel fsharpKernel)
-            {
-                var tempModel = fsharpKernel.CreateModelFromCurrentVariables();
-
-                foreach (var item in tempModel)
-                {
-                    model.TryAdd(item.Key, item.Value);
-                }
-            }
-
-            return model;
+        foreach (var item in tempModel)
+        {
+            model.TryAdd(item.Key, item.Value);
         }
 
-        private static IDictionary<string, object> CreateModelFromCurrentVariables(this CSharpKernel csharpKernel)
-            => csharpKernel
-                ?.ScriptState
-                ?.Variables
-                .Aggregate(new ExpandoObject() as IDictionary<string, object>,
-                (dictionary, variable) =>
-                {
-                    dictionary[variable.Name] = variable.Value;
-                    return dictionary;
-                }) ?? new Dictionary<string, object>();
-
-        private static IDictionary<string, object> CreateModelFromCurrentVariables(this FSharpKernel fsharpKernel)
-            => fsharpKernel
-                ?.GetValues()
-                .Aggregate(new ExpandoObject() as IDictionary<string, object>,
-                (dictionary, variable) =>
-                {
-                    dictionary[variable.Name] = variable.Value;
-                    return dictionary;
-                }) ?? new Dictionary<string, object>();
+        return model;
     }
+
+    private static IDictionary<string, object> GetVariables(this CSharpKernel csharpKernel)
+        => csharpKernel
+            .ScriptState
+            ?.Variables
+            .Aggregate(new Dictionary<string, object>() as IDictionary<string, object>,
+            (dictionary, variable) =>
+            {
+                dictionary.Add(variable.Name, variable.Value);
+                return dictionary;
+            }) ?? ImmutableDictionary<string, object>.Empty;
+
+    private static IDictionary<string, object> GetVariables(this FSharpKernel fsharpKernel)
+        => fsharpKernel
+            .GetValues()
+            .Aggregate(new Dictionary<string, object>() as IDictionary<string, object>,
+            (dictionary, variable) =>
+            {
+                dictionary.Add(variable.Name, variable.Value);
+                return dictionary;
+            });
 }

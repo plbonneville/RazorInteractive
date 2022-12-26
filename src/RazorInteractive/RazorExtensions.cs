@@ -1,67 +1,57 @@
-﻿using System;
-using System.Collections.Generic;
-using System.CommandLine;
-using System.Linq;
-using System.Text;
+﻿using System.Text;
 using System.Text.Encodings.Web;
-using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Html;
 using Microsoft.DotNet.Interactive;
 using Microsoft.DotNet.Interactive.Formatting;
 
-namespace RazorInteractive
+namespace RazorInteractive;
+
+public static class RazorExtensions
 {
-    public static class RazorExtensions
+    private static readonly string[] DefaultImports = new[]
     {
-        private static readonly string[] DeaultImports = new[]
+        "System",
+        "System.Text",
+        "System.Collections",
+        "System.Collections.Generic",
+        "System.Linq",
+        "System.Threading.Tasks"
+    };
+
+    /// <summary>
+    /// Registers the type <see cref="RazorMarkdown"/> as a formatter.
+    /// </summary>
+    /// <param name="kernel">A <see cref="Kernel"/>.</param>
+    /// <returns>A reference to this instance after the operation has completed.</returns>
+    public static T UseRazor<T>(this T kernel) where T : Kernel
+    {
+        Formatter.Register<RazorMarkdown>((markdown, writer) =>
         {
-            "System",
-            "System.Text",
-            "System.Collections",
-            "System.Collections.Generic",
-            "System.Linq",
-            "System.Threading.Tasks"
-        };
+            IHtmlContent html = new HtmlString(string.Empty);
 
-        public static T UseRazor<T>(this T kernel) where T : Kernel
-        {
-            Formatter.Register<RazorMarkdown>((markdown, writer) =>
-            {
-                IHtmlContent html = new HtmlString("");
+            var model = kernel.CreateModelFromCurrentVariables();
 
-                var model = kernel.CreateModelFromCurrentVariables();
+            Task.Run(async () => html = await GenerateHtmlAsync(markdown.Value, model))
+            .Wait();
 
-                Task.Run(async () =>
-                {
-                    html = await GenerateHtmlAsync(markdown.Value, model);
-                })
-                .ContinueWith(x =>
-                {
-                    if (x.IsFaulted)
-                    {
-                        throw x.Exception;
-                    }
-                })
-                .Wait();
+            html.WriteTo(writer, HtmlEncoder.Default);
 
-                html.WriteTo(writer, HtmlEncoder.Default);
+        }, HtmlFormatter.MimeType);
 
-            }, HtmlFormatter.MimeType);
+        return kernel;
+    }
 
-            return kernel;
-        }
+    private static async Task<IHtmlContent> GenerateHtmlAsync(string submittedMarkdown, IDictionary<string, object> model)
+    {
+        var renderer = new RazorRenderer();
 
-        private static async Task<IHtmlContent> GenerateHtmlAsync(string submittedMarkdown, IDictionary<string, object> model)
-        {
-            var renderer = new RazorRenderer();
+        var code = DefaultImports
+            .Aggregate(new StringBuilder(),
+            (sb, @namespace) => sb.AppendLine($"@using {@namespace}"));
 
-            var code = DeaultImports
-                .Aggregate(new StringBuilder(),
-                (sb, @namespace) => sb.AppendLine($"@using {@namespace}"));
+        code.Append(submittedMarkdown);
 
-            code.Append(submittedMarkdown);
-
-            return await renderer.ParseAsync(code.ToString(), model);
-        }
+        return await renderer.ParseAsync(code.ToString(), model);
     }
 }

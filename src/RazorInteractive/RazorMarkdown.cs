@@ -1,14 +1,6 @@
-﻿namespace RazorInteractive
-{
-    public class RazorMarkdown
-    {
-        public RazorMarkdown(string value)
-        {
-            Value = value;
-        }
+﻿namespace RazorInteractive;
 
-        public string Value { get; }
-
-        public override string ToString() => Value;
-    }
-}
+/// <summary>
+/// Type used to register a markdown formatter for Razor.
+/// </summary>
+internal sealed record RazorMarkdown(string Value);

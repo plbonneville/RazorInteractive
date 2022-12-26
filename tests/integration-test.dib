@@ -1,8 +1,11 @@
+#!meta
+
+{"kernelInfo":{"defaultKernelName":null,"items":[{"name":"csharp","languageName":"C#","aliases":["c#","cs"]},{"name":"fsharp","languageName":"F#","aliases":["f#","fs"]},{"name":"pwsh","languageName":"PowerShell","aliases":["powershell"]},{"name":"javascript","languageName":"JavaScript","aliases":["js"]},{"name":"html","languageName":"HTML"},{"name":"sql","languageName":"SQL"},{"name":"kql","languageName":"KQL"},{"name":"mermaid","languageName":"Mermaid"},{"name":"httpRequest","languageName":"http"},{"name":"value"}]}}
+
 #!pwsh
 
 # 0. Clean-up the bin and obj folders
-# get-childitem .. -Filter "bin" -recurse | foreach ($_) {remove-item $_.fullname -Force -recurse}
-# get-childitem .. -Filter "obj" -recurse | foreach ($_) {remove-item $_.fullname -Force -recurse}
+Get-ChildItem .. -Include bin,obj -Recurse | Remove-Item -Force -Recurse
 
 # 1. Build the project
 dotnet build ../src/RazorInteractive/RazorInteractive.csproj

@@ -1,38 +1,43 @@
-﻿using System;
-using System.CommandLine.Invocation;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Html;
+﻿using Microsoft.AspNetCore.Html;
 using Microsoft.DotNet.Interactive;
 using Microsoft.DotNet.Interactive.Commands;
 using Microsoft.DotNet.Interactive.Formatting;
 
-namespace RazorInteractive
+namespace RazorInteractive;
+
+public class RazorKernelExtension : IKernelExtension, IStaticContentSource
 {
-    public class RazorKernelExtension : IKernelExtension, IStaticContentSource
+    public string Name => "Razor";
+
+    /// <summary>
+    /// When the composite kernel is loaded, add a Razor kernel and register the Razor formatter.
+    /// </summary>
+    /// <param name="kernel">Must be of type <see cref="CompositeKernel"/>.</param>
+    public async Task OnLoadAsync(Kernel kernel)
     {
-        public string Name => "Razor";
-
-        public async Task OnLoadAsync(Kernel kernel)
+        if (kernel is not CompositeKernel compositeKernel)
         {
-            if (kernel is CompositeKernel compositeKernel)
-            {
-                compositeKernel.Add(new RazorKernel());
-            }
-
-            kernel.UseRazor();
-
-            var message = new HtmlString(@"
-<details>
-    <summary>Renders the code block as Razor markup in dotnet-interactive notebooks.</summary>
-    <p>This extension adds a new kernel that can render Razor markdown.</p>
-    <p>All C# and F# variables are available in the <code>@Model</code> property.</p>
-</details>");
-
-            var formattedValue = new FormattedValue(
-                HtmlFormatter.MimeType,
-                message.ToDisplayString(HtmlFormatter.MimeType));
-
-            await kernel.SendAsync(new DisplayValue(formattedValue, Guid.NewGuid().ToString()));
+            throw new InvalidOperationException("The Razor kernel can only be added into a CompositeKernel.");
         }
+
+        // Add a RazorKernel as a child kernel to the CompositeKernel
+        compositeKernel.Add(new RazorKernel());
+
+        compositeKernel.UseRazor();
+
+        var message = new HtmlString(
+            """
+            <details>
+                <summary>Renders the code block as Razor markup in dotnet-interactive notebooks.</summary>
+                <p>This extension adds a new kernel that can render Razor markdown.</p>
+                <p>All C# and F# variables are available in the <code>@Model</code> property.</p>
+            </details>
+            """);
+
+        var formattedValue = new FormattedValue(
+            HtmlFormatter.MimeType,
+            message.ToDisplayString(HtmlFormatter.MimeType));
+
+        await compositeKernel.SendAsync(new DisplayValue(formattedValue, Guid.NewGuid().ToString()));
     }
 }
