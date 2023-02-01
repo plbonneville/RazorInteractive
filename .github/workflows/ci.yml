@@ -38,4 +38,5 @@ jobs:
         run: dotnet pack --configuration Release --no-build ./src/RazorInteractive
 
       - name: Publish NuGet package
-        run: dotnet nuget push **/*.nupkg --api-key $NUGET_API_KEY --source https://api.nuget.org/v3/index.json
+        if: startsWith(github.ref, 'refs/heads/main')
+        run: dotnet nuget push ./src/RazorInteractive/bin/Release/*.nupkg --api-key $NUGET_API_KEY --source https://api.nuget.org/v3/index.json
