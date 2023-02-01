@@ -10,7 +10,7 @@
     <NoWarn>$(NoWarn);NU5100,NU5104</NoWarn>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <Deterministic>true</Deterministic>
-    <IncludeSymbols>true</IncludeSymbols>
+    <IncludeSymbols>false</IncludeSymbols>
     <Authors>Pier-Luc Bonneville</Authors>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://plbonneville.com/blog/introducing-the-dotnet-interactive-notebooks-razor-extension/</PackageProjectUrl>
