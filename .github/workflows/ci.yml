@@ -7,6 +7,8 @@ on:
   pull_request:
     branches:
       - main
+env:
+  NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
 
 jobs:
   build:
@@ -32,11 +34,9 @@ jobs:
       - name: Test
         run: dotnet test --nologo --no-restore --verbosity normal ./tests/RazorInteractive.Tests
 
-      - name: Publish NuGet
-        uses: brandedoutcast/publish-nuget@v2.5.5
-        with:
-          # Filepath of the project to be packaged, relative to root of repository
-          PROJECT_FILE_PATH: ./src/RazorInteractive/RazorInteractive.csproj
+      - name: Pack NuGet package
+        run: dotnet pack --configuration Release --no-build ./src/RazorInteractive
 
-          # API key to authenticate with NuGet server
-          NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+      - name: Publish NuGet package
+        if: startsWith(github.ref, 'refs/heads/main')
+        run: dotnet nuget push ./src/RazorInteractive/bin/Release/*.nupkg --api-key $NUGET_API_KEY --source https://api.nuget.org/v3/index.json
