@@ -39,4 +39,4 @@ jobs:
 
       - name: Publish NuGet package
         if: startsWith(github.ref, 'refs/heads/main')
-        run: dotnet nuget push ./src/RazorInteractive/bin/Release/*.nupkg --api-key $NUGET_API_KEY --source https://api.nuget.org/v3/index.json
+        run: dotnet nuget push ./src/RazorInteractive/bin/Release/*.nupkg --api-key $NUGET_API_KEY --source https://api.nuget.org/v3/index.json --skip-duplicate
