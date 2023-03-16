@@ -5,7 +5,7 @@
 To get started with Razor in .NET Interactive Notebooks, first install the `RazorInteractive` NuGet package. In a new `C# (.NET Interactive)` cell enter and run the following:
 
 ```
-#r "nuget: RazorInteractive, 1.1.7"
+#r "nuget: RazorInteractive, 1.1.8"
 ```
 
 Using the `#!razor` magic command your code cell will be parsed by a Razor engine and the results displayed using the `"txt/html"` mime type.
