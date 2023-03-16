@@ -6,7 +6,7 @@
     <IncludeBuildOutput>true</IncludeBuildOutput>
     <IsPackable>true</IsPackable>
     <PackageDescription>Renders Razor markup in dotnet-interactive notebooks.</PackageDescription>
-    <Version>1.1.7</Version>
+    <Version>1.1.8</Version>
     <NoWarn>$(NoWarn);NU5100,NU5104</NoWarn>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <Deterministic>true</Deterministic>
@@ -29,18 +29,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.DotNet.Interactive.CSharp" Version="1.0.0-beta.23102.2" />
-    <PackageReference Include="Microsoft.DotNet.Interactive.FSharp" Version="1.0.0-beta.23102.2" />
-    <PackageReference Include="Microsoft.DotNet.Interactive" Version="1.0.0-beta.23102.2" />
-    <PackageReference Include="Microsoft.DotNet.Interactive.Formatting" Version="1.0.0-beta.23102.2" />
+    <PackageReference Include="Microsoft.DotNet.Interactive.CSharp" Version="1.0.0-beta.23165.2" />
+    <PackageReference Include="Microsoft.DotNet.Interactive.FSharp" Version="1.0.0-beta.23165.2" />
+    <PackageReference Include="Microsoft.DotNet.Interactive" Version="1.0.0-beta.23165.2" />
+    <PackageReference Include="Microsoft.DotNet.Interactive.Formatting" Version="1.0.0-beta.23165.2" />
     <PackageReference Include="RazorLight" Version="2.3.1" />
   </ItemGroup>
 
   <!--RazorLight dependencies, needed since RazorLight does not directly support .NET 7.0-->
   <ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.Extensions" Version="6.0.14" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Razor" Version="6.0.14" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.Extensions" Version="6.0.15" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Razor" Version="6.0.15" />
     <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
