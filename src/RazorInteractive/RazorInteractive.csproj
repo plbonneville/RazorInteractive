@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <TargetFramework>net7.0</TargetFramework>
@@ -29,7 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.DotNet.Interactive.CSharp" Version="1.0.0-beta.23165.2" />
+    <PackageReference Include="Microsoft.DotNet.Interactive.CSharp" Version="1.0.0-beta.23306.2" />
     <PackageReference Include="Microsoft.DotNet.Interactive.FSharp" Version="1.0.0-beta.23165.2" />
     <PackageReference Include="Microsoft.DotNet.Interactive" Version="1.0.0-beta.23165.2" />
     <PackageReference Include="Microsoft.DotNet.Interactive.Formatting" Version="1.0.0-beta.23165.2" />
