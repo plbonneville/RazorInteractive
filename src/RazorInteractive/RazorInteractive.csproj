@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <TargetFramework>net7.0</TargetFramework>
@@ -31,7 +31,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.DotNet.Interactive.CSharp" Version="1.0.0-beta.23403.1" />
     <PackageReference Include="Microsoft.DotNet.Interactive.FSharp" Version="1.0.0-beta.23403.1" />
-    <PackageReference Include="Microsoft.DotNet.Interactive" Version="1.0.0-beta.23403.1" />
+    <PackageReference Include="Microsoft.DotNet.Interactive" Version="1.0.0-beta.23511.5" />
     <PackageReference Include="Microsoft.DotNet.Interactive.Formatting" Version="1.0.0-beta.23403.1" />
     <PackageReference Include="RazorLight" Version="2.3.1" />
   </ItemGroup>
