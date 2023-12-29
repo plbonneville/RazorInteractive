@@ -1,25 +1,22 @@
 #!meta
 
-{"kernelInfo":{"defaultKernelName":null,"items":[{"name":"csharp","languageName":"C#","aliases":["c#","cs"]},{"name":"fsharp","languageName":"F#","aliases":["f#","fs"]},{"name":"pwsh","languageName":"PowerShell","aliases":["powershell"]},{"name":"javascript","languageName":"JavaScript","aliases":["js"]},{"name":"html","languageName":"HTML"},{"name":"sql","languageName":"SQL"},{"name":"kql","languageName":"KQL"},{"name":"mermaid","languageName":"Mermaid"},{"name":"httpRequest","languageName":"http"},{"name":"value"}]}}
+{"kernelInfo":{"defaultKernelName":"csharp","items":[{"aliases":["c#","cs"],"languageName":"C#","name":"csharp"},{"aliases":["f#","fs"],"languageName":"F#","name":"fsharp"},{"aliases":[],"languageName":"HTML","name":"html"},{"aliases":[],"languageName":"http","name":"httpRequest"},{"aliases":["js"],"languageName":"JavaScript","name":"javascript"},{"aliases":[],"languageName":"KQL","name":"kql"},{"aliases":[],"languageName":"Mermaid","name":"mermaid"},{"aliases":["powershell"],"languageName":"PowerShell","name":"pwsh"},{"aliases":[],"name":"razor"},{"aliases":[],"languageName":"SQL","name":"sql"},{"aliases":[],"name":"value"}]}}
 
 #!pwsh
 
 # 0. Clean-up the bin and obj folders
 Get-ChildItem .. -Include bin,obj -Recurse | Remove-Item -Force -Recurse
 
-# 1. Build the project
-dotnet build ../src/RazorInteractive/RazorInteractive.csproj
-
-# Pack up the NuGet package. Note, you should increment the version because the previous one, once installed, will be in your NuGet cache
+# 1. Pack up the NuGet package. Note, you should increment the version because the previous one, once installed, will be in your NuGet cache
 $version = [System.DateTime]::Now.ToString("yyyy.MM.dd.HHmmss")
 dotnet pack /p:PackageVersion=$version ../src/RazorInteractive/RazorInteractive.csproj
 
-# 3. Check that the package is there
+# 2. Check that the package is there
 Get-ChildItem .. -Recurse *.nupkg
 
 #!csharp
 
-#i nuget:/workspaces/RazorInteractive/src/RazorInteractive/bin/Debug
+#i nuget:/workspaces/RazorInteractive/src/RazorInteractive/bin/Release
 #r "nuget:RazorInteractive"
 
 #!csharp
